@@ -1,0 +1,8 @@
+# Empêche l'accès aux fichiers sensibles
+<FilesMatch "(\.php|\.env|\.ini|\.log|config\.php)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Optionnel : empêcher l'indexation du dossier
+Options -Indexes
