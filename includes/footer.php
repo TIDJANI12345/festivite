@@ -1,11 +1,9 @@
-<footer class="bg-gray-800 text-gray-300 text-center py-3 mt-10">
-  <div class="max-w-7xl mx-auto px-4">
-    <p>&copy; <?php echo date('Y'); ?> Flash Shop. Tous droits réservés.</p>
-    <p>
-      Contactez-nous : 
-      <a href="/FlashShop/contact.php" class="text-green-400 hover:underline">
-        Formulaire de contact
-      </a>
-    </p>
+<footer class="site-footer">
+  <div class="container">
+    <p>© <?php echo date("Y"); ?> Institut Supérieur Saint Paul de Tarse - Département Informatique</p>
+    <p>Projet réalisé par les étudiants de la filière SIL</p>
   </div>
 </footer>
+
+</body>
+</html>
