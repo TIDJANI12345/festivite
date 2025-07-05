@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- includes/header.php -->
 
 <!-- ✅ Barre de navigation animée -->

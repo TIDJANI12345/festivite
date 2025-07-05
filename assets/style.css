@@ -183,3 +183,39 @@ body {
     gap: 10px;
   }
 }
+
+/* foot.php */
+
+body {
+  background-color: #f8fafc;
+  font-family: 'Segoe UI', 'Helvetica', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h2, h3 {
+  font-weight: bold;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+input[type="number"] {
+  padding: 0.3rem;
+  width: 3rem;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  transition: background 0.3s ease;
+}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- 🔻 FOOTER -->
 <footer>
   <div class="footer-container">
