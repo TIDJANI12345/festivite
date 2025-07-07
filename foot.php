@@ -18,6 +18,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['match_id'])) {
 // Récupère toutes les poules
 $poules = $pdo->query("SELECT * FROM poules")->fetchAll(PDO::FETCH_ASSOC);
 ?>
+<!-- En-tête foot stylé -->
+<div class="relative bg-[rgb(186,40,30)] text-white text-center py-10 px-4 rounded-b-3xl shadow-lg overflow-hidden"
+     data-aos="zoom-in" data-aos-duration="1000">
+
+  <!-- Stickers animés -->
+  <div class="absolute top-2 left-2 text-4xl animate-bounce">⚽</div>
+  <div class="absolute top-2 right-2 text-4xl animate-bounce">🔥</div>
+
+  <h1 class="text-4xl md:text-5xl font-extrabold tracking-wide mb-2">
+    Tournoi de Football ISSPT Festivités
+  </h1>
+
+  <p style="color: rgb(8, 0, 32);" class="text-lg md:text-xl font-semibold italic"">
+    Passion ⚽ | Compétition 🔥 | Fair-play 🤝
+  </p>
+
+  <!-- Effet de bordure bas -->
+  <div class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-[#ba281e] via-orange-500 to-[#ba281e] animate-pulse"></div>
+</div>
+
 
 <?php foreach ($poules as $poule): ?>
     <?php
@@ -34,22 +54,31 @@ $poules = $pdo->query("SELECT * FROM poules")->fetchAll(PDO::FETCH_ASSOC);
     $equipes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
-    <section class='max-w-5xl mx-auto mt-10 p-4 bg-white rounded shadow'>
-        <h2 class='text-2xl font-bold text-orange-600 mb-4'>⚽ <?= $poule_nom ?></h2>
+    <?php
+// Cette section a été revisitée avec un style moderne et dynamique utilisant Tailwind CSS
+?>
 
-        <!-- Boutons équipes cliquables -->
-        <div class='grid grid-cols-2 md:grid-cols-4 gap-4 mb-6'>
-            <?php foreach ($equipes as $eq): ?>
-                <button
-                    class='bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow'
-                    onclick="openModal(<?= $eq['id'] ?>, '<?= htmlspecialchars(addslashes($eq['nom'])) ?>')"
-                >
-                    <?= htmlspecialchars($eq['nom']) ?>
-                </button>
-            <?php endforeach; ?>
-        </div>
+<section 
+  class="max-w-7xl mx-auto mt-12 px-4 py-8 bg-white rounded-2xl shadow-2xl border-l-4 border-[rgb(186,40,30)] animate__animated animate__fadeInUp"
+  data-aos="fade-up" data-aos-duration="1000"
+>
+  <h2 class="text-3xl md:text-4xl font-extrabold text-[rgb(186,40,30)] mb-6 relative pb-2 border-b-4 border-[rgb(8,0,32)] w-fit mx-auto">
+    ⚽ <?= strtoupper($poule_nom) ?>
+    <span class="absolute left-0 bottom-0 w-10 h-1 bg-[rgb(8,0,32)] animate-pulse"></span>
+  </h2>
+  <!-- Boutons d’équipes -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-10">
+    <?php foreach ($equipes as $eq): ?>
+      <button
+        onclick="openModal(<?= $eq['id'] ?>, '<?= htmlspecialchars(addslashes($eq['nom'])) ?>')"
+        class="bg-[rgb(8,0,32)] hover:bg-[rgb(186,40,30)] transition duration-300 ease-in-out text-white font-bold py-2 px-4 rounded-xl shadow-md hover:scale-105"
+      >
+        <?= htmlspecialchars($eq['nom']) ?>
+      </button>
+    <?php endforeach; ?>
+  </div>
 
-        <?php
+  <?php
         // Matchs
         $sql = "SELECT m.*, e1.nom AS equipe1, e2.nom AS equipe2 
                 FROM matchs m 
@@ -60,36 +89,42 @@ $poules = $pdo->query("SELECT * FROM poules")->fetchAll(PDO::FETCH_ASSOC);
         $stmt->execute([$poule_id]);
         $matchs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         ?>
+  <h3 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-[rgb(8,0,32)] pl-3">Matchs</h3>
+  <?php foreach ($matchs as $match): ?>
+    <div class="bg-gray-50 rounded-lg shadow p-4 mb-4 flex justify-between items-center transition-all duration-300 hover:bg-gray-100">
+      <span class="font-semibold text-[rgb(8,0,32)]">
+        <?= htmlspecialchars($match['equipe1']) ?>
+        <?= is_null($match['score1']) ? '' : $match['score1'] ?>
+        -
+        <?= is_null($match['score2']) ? '' : $match['score2'] ?>
+        <?= htmlspecialchars($match['equipe2']) ?>
+      </span>
+      <span class="text-sm <?= $match['statut'] === 'terminé' ? 'text-green-600' : 'text-orange-500' ?>">
+        <?= $match['statut'] === 'terminé' ? '✅ Terminé' : '⏳ À venir' ?>
+      </span>
+    </div>
+  <?php endforeach; ?>
 
-        <h3 class='text-lg font-semibold mb-2'>Matchs & Scores</h3>
-
-        <?php foreach ($matchs as $match): 
-            $e1 = htmlspecialchars($match['equipe1']);
-            $e2 = htmlspecialchars($match['equipe2']);
-            $s1 = $match['score1'];
-            $s2 = $match['score2'];
-            $id = $match['id'];
-        ?>
-            <?php if ($match['statut'] === 'terminé'): ?>
-                <div class='bg-gray-100 rounded p-3 mb-3 flex justify-between items-center'>
-                    <span class='font-semibold'><?= "$e1 $s1 - $s2 $e2" ?></span>
-                    <span class='text-sm text-gray-500'>(Terminé)</span>
-                </div>
-            <?php else: ?>
-                <form method='post' class='bg-white rounded shadow p-3 mb-3 flex flex-wrap items-center gap-3'>
-                    <div class='flex-1 text-center font-semibold'><?= $e1 ?></div>
-                    <input type='number' name='score1' value='<?= $s1 ?? '' ?>' class='w-16 text-center border rounded' required>
-                    <span class='font-bold'> - </span>
-                    <input type='number' name='score2' value='<?= $s2 ?? '' ?>' class='w-16 text-center border rounded' required>
-                    <div class='flex-1 text-center font-semibold'><?= $e2 ?></div>
-                    <input type='hidden' name='match_id' value='<?= $id ?>'>
-                    <button class='bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded' type='submit'>Enregistrer</button>
-                </form>
-            <?php endif; ?>
-        <?php endforeach; ?>
-
+  <!-- Tableau de classement -->
+  <h3 class="mt-10 mb-4 text-xl font-bold text-[rgb(8,0,32)]">Classement</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left border border-collapse">
+      <thead class="bg-[rgb(8,0,32)] text-white">
+        <tr>
+          <th class="border px-3 py-2">#</th>
+          <th class="border px-3 py-2">Équipe</th>
+          <th class="border px-3 py-2">J</th>
+          <th class="border px-3 py-2">G</th>
+          <th class="border px-3 py-2">N</th>
+          <th class="border px-3 py-2">P</th>
+          <th class="border px-3 py-2">BP</th>
+          <th class="border px-3 py-2">BC</th>
+          <th class="border px-3 py-2">+/-</th>
+          <th class="border px-3 py-2">Pts</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-800">
         <?php
-        // Calcul classement
         $classement = [];
         foreach ($equipes as $eq) {
             $classement[$eq['nom']] = ['J' => 0, 'G' => 0, 'N' => 0, 'P' => 0, 'BP' => 0, 'BC' => 0, 'DIFF' => 0, 'PTS' => 0];
@@ -131,43 +166,36 @@ $poules = $pdo->query("SELECT * FROM poules")->fetchAll(PDO::FETCH_ASSOC);
         }
 
         uasort($classement, fn($a, $b) => [$b['PTS'], $b['DIFF'], $b['BP']] <=> [$a['PTS'], $a['DIFF'], $a['BP']]);
+ $pos = 1; foreach ($classement as $equipe => $stat): ?>
+          <tr class="<?= $pos % 2 === 0 ? 'bg-gray-100' : '' ?> hover:bg-orange-50 transition">
+            <td class="border px-3 py-2 text-center font-semibold"><?= $pos ?></td>
+            <td class="border px-3 py-2"><?= htmlspecialchars($equipe) ?></td>
+            <td class="border px-3 py-2 text-center"><?= $stat['J'] ?></td>
+            <td class="border px-3 py-2 text-center"><?= $stat['G'] ?></td>
+            <td class="border px-3 py-2 text-center"><?= $stat['N'] ?></td>
+            <td class="border px-3 py-2 text-center"><?= $stat['P'] ?></td>
+            <td class="border px-3 py-2 text-center"><?= $stat['BP'] ?></td>
+            <td class="border px-3 py-2 text-center"><?= $stat['BC'] ?></td>
+            <td class="border px-3 py-2 text-center"><?= $stat['DIFF'] ?></td>
+            <td class="border px-3 py-2 text-center font-bold text-[rgb(186,40,30)]"><?= $stat['PTS'] ?></td>
+          </tr>
+        <?php $pos++; endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+</section>
 
-        echo "<h3 class='mt-6 mb-2 font-semibold'>Classement</h3>
-        <table class='w-full table-auto border border-collapse text-sm'>
-            <thead class='bg-blue-900 text-white'>
-                <tr>
-                    <th class='border px-2'>#</th>
-                    <th class='border px-2 text-left'>Équipe</th>
-                    <th class='border px-2'>J</th>
-                    <th class='border px-2'>G</th>
-                    <th class='border px-2'>N</th>
-                    <th class='border px-2'>P</th>
-                    <th class='border px-2'>BP</th>
-                    <th class='border px-2'>BC</th>
-                    <th class='border px-2'>+/-</th>
-                    <th class='border px-2'>Pts</th>
-                </tr>
-            </thead><tbody>";
+<!-- Animation fade-in CSS -->
+<style>
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out;
+}
+</style>
 
-        $pos = 1;
-        foreach ($classement as $equipe => $stat) {
-            echo "<tr class='" . ($pos % 2 == 0 ? 'bg-gray-100' : '') . "'>
-                <td class='border px-2 text-center'>$pos</td>
-                <td class='border px-2'>$equipe</td>
-                <td class='border px-2 text-center'>{$stat['J']}</td>
-                <td class='border px-2 text-center'>{$stat['G']}</td>
-                <td class='border px-2 text-center'>{$stat['N']}</td>
-                <td class='border px-2 text-center'>{$stat['P']}</td>
-                <td class='border px-2 text-center'>{$stat['BP']}</td>
-                <td class='border px-2 text-center'>{$stat['BC']}</td>
-                <td class='border px-2 text-center'>{$stat['DIFF']}</td>
-                <td class='border px-2 text-center font-bold'>{$stat['PTS']}</td>
-            </tr>";
-            $pos++;
-        }
-        echo "</tbody></table>";
-        ?>
-    </section>
 <?php endforeach; ?>
 
 <?php
@@ -185,126 +213,153 @@ $matchs = $pdo->query("
 ")->fetchAll();
 ?>
 
-<div class="max-w-5xl mx-auto mt-12 p-6 bg-white rounded shadow">
-    <h2 class="text-2xl font-bold mb-4">📅 Calendrier Général</h2>
-    <table class="w-full border border-collapse text-sm">
-        <thead class="bg-gray-800 text-white">
-            <tr>
-                <th class="border px-2 py-1">Date & Heure</th>
-                <th class="border px-2 py-1">Poule</th>
-                <th class="border px-2 py-1">Équipe 1</th>
-                <th class="border px-2 py-1">Équipe 2</th>
-                <th class="border px-2 py-1">Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($matchs as $m): ?>
-                <tr>
-                    <td class="border px-2 py-1"><?= $m['date_heure'] ? date('d/m/Y H:i', strtotime($m['date_heure'])) : '⏳ À venir' ?></td>
-                    <td class="border px-2 py-1"><?= htmlspecialchars($m['poule']) ?></td>
-                    <td class="border px-2 py-1"><?= htmlspecialchars($m['equipe1']) ?></td>
-                    <td class="border px-2 py-1"><?= htmlspecialchars($m['equipe2']) ?></td>
-                    <td class="border px-2 py-1 text-center">
-                        <?= is_null($m['score1']) || is_null($m['score2']) ? '⏳' : "{$m['score1']} - {$m['score2']}" ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+<div 
+  class="max-w-6xl mx-auto mt-14 px-6 py-8 bg-white rounded-2xl shadow-2xl border-l-4 border-[rgb(186,40,30)] animate__animated animate__fadeInUp"
+  data-aos="fade-up" data-aos-duration="1000"
+>
+  <h2 class="text-3xl md:text-4xl font-extrabold text-[rgb(186,40,30)] mb-6 flex items-center gap-3 border-b-4 border-[rgb(8,0,32)] pb-2 w-fit mx-auto relative">
+    📅 Calendrier Général
+    <span class="absolute left-0 bottom-0 w-10 h-1 bg-[rgb(8,0,32)] animate-pulse"></span>
+  </h2>
+
+  <div class="overflow-x-auto rounded-lg shadow-lg">
+    <table class="w-full text-sm text-left border-collapse">
+      <thead class="bg-[rgb(8,0,32)] text-white uppercase">
+        <tr>
+          <th class="px-4 py-3 border border-[rgb(186,40,30)]">Date & Heure</th>
+          <th class="px-4 py-3 border border-[rgb(186,40,30)]">Poule</th>
+          <th class="px-4 py-3 border border-[rgb(186,40,30)]">Équipe 1</th>
+          <th class="px-4 py-3 border border-[rgb(186,40,30)]">Équipe 2</th>
+          <th class="px-4 py-3 border border-[rgb(186,40,30)] text-center">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($matchs as $m): ?>
+        <tr class="odd:bg-white even:bg-gray-50 hover:bg-[rgb(186,40,30)] hover:text-white transition duration-300 ease-in-out cursor-pointer">
+          <td class="border border-[rgb(186,40,30)] px-4 py-2 whitespace-nowrap">
+            <?= $m['date_heure'] ? date('d/m/Y H:i', strtotime($m['date_heure'])) : '⏳ À venir' ?>
+          </td>
+          <td class="border border-[rgb(186,40,30)] px-4 py-2"><?= htmlspecialchars($m['poule']) ?></td>
+          <td class="border border-[rgb(186,40,30)] px-4 py-2"><?= htmlspecialchars($m['equipe1']) ?></td>
+          <td class="border border-[rgb(186,40,30)] px-4 py-2"><?= htmlspecialchars($m['equipe2']) ?></td>
+          <td class="border border-[rgb(186,40,30)] px-4 py-2 text-center font-semibold">
+            <?= is_null($m['score1']) || is_null($m['score2']) ? '⏳' : "{$m['score1']} - {$m['score2']}" ?>
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
     </table>
+  </div>
 </div>
+</div>
+<style>
+    @media (max-width: 500px) {
+  #player-positions div {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+}
 
+</style>
 <!-- Modal joueurs -->
-<!-- Modal joueurs avec terrain -->
-<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-  <div class="bg-white rounded-lg p-4 md:p-6 max-w-3xl w-full relative shadow-lg">
-    <button onclick="closeModal()" class="absolute top-2 right-3 text-gray-500 hover:text-gray-900 text-3xl font-bold">&times;</button>
-    <h2 id="modal-title" class="text-xl font-bold mb-4 text-center"></h2>
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50 transition-opacity duration-300">
+  <div class="bg-white rounded-xl p-6 max-w-3xl w-full relative shadow-2xl animate-fadeIn">
+    <button onclick="closeModal()" 
+      class="absolute top-3 right-4 text-gray-500 hover:text-[rgb(186,40,30)] text-4xl font-bold transition-colors duration-300">
+      &times;
+    </button>
+    <h2 id="modal-title" class="text-2xl font-bold mb-6 text-center text-[rgb(8,0,32)]"></h2>
 
-    <div class="relative w-full h-[500px] bg-green-100 border rounded overflow-hidden">
-<img src="assets/images/Football.png" alt="Demi-terrain" class="w-full h-full object-cover">
-
-      <div id="player-positions" class="absolute inset-0">
-        <!-- les joueurs s'afficheront ici -->
-      </div>
+    <div class="relative w-full h-[500px] bg-green-100 border border-[rgb(8,0,32)] rounded overflow-hidden shadow-inner">
+      <img src="assets/images/Football.png" alt="Demi-terrain" class="w-full h-full object-contain md:object-cover">
+      <div id="player-positions" class="absolute inset-0"></div>
     </div>
   </div>
 </div>
 
+<style>
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease forwards;
+}
+</style>
 
 <script>
 function openModal(equipeId, equipeNom) {
-    document.getElementById('modal-title').textContent = 'Composition de ' + equipeNom;
-    const container = document.getElementById('player-positions');
-    container.innerHTML = '<p class="text-white text-center mt-20">Chargement...</p>';
+  const modal = document.getElementById('modal');
+  document.getElementById('modal-title').textContent = 'Composition de ' + equipeNom;
+  const container = document.getElementById('player-positions');
+  container.innerHTML = '<p class="text-[rgb(8,0,32)] text-center mt-20 font-semibold">Chargement...</p>';
 
-    fetch('get_players.php?equipe_id=' + equipeId)
-        .then(response => response.json())
-        .then(data => {
-            container.innerHTML = '';
+  fetch('get_players.php?equipe_id=' + equipeId)
+    .then(res => res.json())
+    .then(data => {
+    container.innerHTML = '';
 
-            if (!Array.isArray(data) || data.length === 0) {
-                container.innerHTML = '<p class="text-red-600 text-center mt-20">Aucun joueur trouvé.</p>';
-                return;
-            }
+    if (!Array.isArray(data) || data.length === 0) {
+        container.innerHTML = '<p class="text-red-600 text-center mt-20">Aucun joueur trouvé.</p>';
+        return;
+    }
 
-            const postesFixes = {
-                'Gardien': { top: '80%', left: '45%' },
-                'Défenseur': [
-                    { top: '65%', left: '20%' }, { top: '65%', left: '40%' },
-                    { top: '65%', left: '60%' }, { top: '65%', left: '80%' }
-                ],
-                'Milieu': [
-                    { top: '45%', left: '25%' }, { top: '45%', left: '50%' }, { top: '45%', left: '75%' }
-                ],
-                'Attaquant': [
-                    { top: '25%', left: '35%' }, { top: '25%', left: '65%' }
-                ]
-            };
+    const lignes = [1, 3, 3, 3, 4]; // ex: 1-3-3-3-4
+const hauteurs = [80, 60, 45, 30, 15]; // top% pour chaque ligne
+let ligneActuelle = 0;
+let indexDansLigne = 0;
+let joueursPlaces = 0;
 
-            let count = {
-                'Défenseur': 0,
-                'Milieu': 0,
-                'Attaquant': 0
-            };
+data.forEach((joueur, i) => {
+    const div = document.createElement('div');
+    div.className = 'absolute bg-blue-600 text-white text-xs px-2 py-1 rounded shadow text-center';
+    div.style.whiteSpace = 'nowrap';
+    div.innerHTML = joueur.nom + '<br><span class="text-[10px] italic">' + (joueur.poste || 'Inconnu') + '</span>';
 
-            data.forEach((joueur, i) => {
-                const div = document.createElement('div');
-                div.className = 'absolute bg-blue-600 text-white text-xs px-2 py-1 rounded shadow';
+    const nbDansLigne = lignes[ligneActuelle] ?? 3;
+    const top = hauteurs[ligneActuelle] ?? 10;
 
-                let top = '50%', left = (10 + i * 10) + '%'; // par défaut
+    // positionnement horizontal basé sur index dans la ligne
+    let left;
+if (nbDansLigne === 1) {
+    left = 40; // Gardien un peu à gauche
+} else if (nbDansLigne === 2) {
+    left = indexDansLigne === 0 ? 0 : 50; // 1er très à gauche, 2e au centre-gauche
+} else if (nbDansLigne === 3) {
+    left = indexDansLigne === 0 ? 5 : indexDansLigne === 1 ? 40 : 80; // Très à gauche, milieu-gauche, droite modérée
+} else if (nbDansLigne === 4) {
+    left = [5, 25, 45, 65][indexDansLigne]; // Plus de poids sur la partie gauche
+} else {
+    left = (100 / (nbDansLigne + 1)) * (indexDansLigne + 1) - 10; // décalage plus marqué à gauche
+}
 
-                if (joueur.poste === 'Gardien') {
-                    top = postesFixes['Gardien'].top;
-                    left = postesFixes['Gardien'].left;
-                } else if (postesFixes[joueur.poste] && postesFixes[joueur.poste][count[joueur.poste]]) {
-                    const pos = postesFixes[joueur.poste][count[joueur.poste]];
-                    top = pos.top;
-                    left = pos.left;
-                    count[joueur.poste]++;
-                } else {
-                    // Si poste inconnu ou plus de place, placer aléatoirement
-                    top = Math.floor(Math.random() * 70 + 10) + '%';
-                    left = Math.floor(Math.random() * 80 + 10) + '%';
-                }
 
-                div.style.top = top;
-                div.style.left = left;
-                div.innerText = joueur.nom + '\n' + (joueur.poste || 'Inconnu');
-                container.appendChild(div);
-            });
-        })
-        .catch(() => {
-            container.innerHTML = '<p class="text-red-600 text-center mt-20">Erreur chargement joueurs.</p>';
-        });
+    div.style.top = top + '%';
+    div.style.left = left + '%';
 
-    document.getElementById('modal').classList.remove('hidden');
-    document.getElementById('modal').classList.add('flex');
+    container.appendChild(div);
+
+    indexDansLigne++;
+    joueursPlaces++;
+
+    if (indexDansLigne >= nbDansLigne) {
+        ligneActuelle++;
+        indexDansLigne = 0;
+    }
+});
+
+})
+    .catch(() => {
+      container.innerHTML = '<p class="text-red-600 text-center mt-20 font-semibold">Erreur chargement joueurs.</p>';
+    });
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
 }
 
 function closeModal() {
-    const modal = document.getElementById('modal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
+  const modal = document.getElementById('modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
 }
 </script>
 

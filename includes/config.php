@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";       
 $user = "root";            
-$password = "root";        
+$password = "Collins.Chado03";        
 $dbname = "festivite";     
 $charset = 'utf8mb4';
 

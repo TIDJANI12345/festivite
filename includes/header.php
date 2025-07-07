@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-<!-- includes/header.php -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>AOS.init();</script>
 
-<!-- ✅ Barre de navigation animée -->
 <style>
   nav {
     position: sticky;
