@@ -218,7 +218,7 @@
 <section class="section" data-aos="fade-up">
   <h2>👨‍💼 Mot du Président</h2>
   <div class="president">
-    <img src="assets/images/president.jpg" alt="Président ISSPT" data-aos="fade-right">
+    <img src="assets/images/B.jpg" alt="Président ISSPT" data-aos="fade-right">
     <div data-aos="fade-left">
       <p>
         Chers camarades, chers invités,<br><br>
@@ -230,7 +230,7 @@
 </section>
 
 <section class="section" style="text-align: center;" data-aos="flip-up">
-  <a class="btn" href="admin/dashboard.php">👤 Espace Admin</a>
+  <a class="btn" class="admin-btn-slide" href="admin.php">👤 Espace Admin</a>
 </section>
 
 <script>
