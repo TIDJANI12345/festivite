@@ -1,6 +1,5 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script>AOS.init();</script>
-
 <style>
   nav {
     position: sticky;
@@ -230,7 +229,7 @@
     <li><a href="../soiree/soiree.php">Soirée</a></li>
   </ul>
 
-  <a class="admin-btn" href="admin/dashboard.php">👤 Admin</a>
+  <a class="admin-btn" href="admin.php">👤 Admin</a>
 </nav>
 
 <!-- Mobile slide menu -->
@@ -239,7 +238,7 @@
   <a href="foot.php" onclick="toggleMobileMenu()">⚽ Football</a>
   <a href="sortie.php" onclick="toggleMobileMenu()">🚌 Sortie</a>
   <a href="../soiree/soiree.php" onclick="toggleMobileMenu()">🎤 Soirée</a>
-  <a class="admin-btn-slide" href="admin/dashboard.php">👤 Espace Admin</a>
+  <a class="admin-btn-slide" href="admin.php">👤 Espace Admin</a>
 </div>
 
 <div class="overlay" id="menuOverlay" onclick="toggleMobileMenu()"></div>

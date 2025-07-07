@@ -1,4 +1,3 @@
-<!-- 🔻 FOOTER -->
 <footer>
   <div class="footer-container">
     <nav class="footer-nav" aria-label="Navigation du pied de page">
