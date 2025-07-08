@@ -251,7 +251,59 @@ $matchs = $pdo->query("
     </table>
   </div>
 </div>
-</div>
+</div><?php
+// Détermination automatique des finalistes (premiers de chaque poule)
+$finalistes = [];
+foreach ($poules as $poule) {
+    $poule_id = $poule['id'];
+
+    $sql = "SELECT e.nom, e.id,
+                   SUM(CASE WHEN m.equipe1_id = e.id THEN m.score1 ELSE m.score2 END) AS BP,
+                   SUM(CASE WHEN m.equipe1_id = e.id THEN m.score2 ELSE m.score1 END) AS BC,
+                   SUM(CASE 
+                        WHEN (m.equipe1_id = e.id AND m.score1 > m.score2) 
+                          OR (m.equipe2_id = e.id AND m.score2 > m.score1) 
+                        THEN 3 
+                        WHEN m.score1 = m.score2 THEN 1 
+                        ELSE 0 
+                   END) AS PTS
+            FROM equipes e
+            JOIN equipe_poule ep ON ep.equipe_id = e.id
+            JOIN matchs m ON (m.equipe1_id = e.id OR m.equipe2_id = e.id)
+            WHERE ep.poule_id = ?
+              AND m.poule_id = ?
+              AND m.score1 IS NOT NULL AND m.score2 IS NOT NULL
+            GROUP BY e.id
+            ORDER BY 
+                PTS DESC,
+                (SUM(CASE WHEN m.equipe1_id = e.id THEN m.score1 ELSE m.score2 END) -
+                 SUM(CASE WHEN m.equipe1_id = e.id THEN m.score2 ELSE m.score1 END)) DESC,
+                SUM(CASE WHEN m.equipe1_id = e.id THEN m.score1 ELSE m.score2 END) DESC
+            LIMIT 1";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$poule_id, $poule_id]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        $finalistes[] = $result;
+    }
+}
+?>
+
+<!-- SECTION AFFICHAGE DES FINALISTES -->
+<?php if (count($finalistes) === 2): ?>
+<section class="max-w-3xl mx-auto mt-10 mb-10 px-6 py-6 bg-white border-l-4 border-[rgb(186,40,30)] rounded-xl shadow-lg">
+  <h2 class="text-2xl font-bold text-[rgb(186,40,30)] text-center mb-6 border-b-2 pb-2 border-[rgb(8,0,32)]">⚔️ Affiche Finale Provisoire</h2>
+  <div class="flex justify-around items-center text-[rgb(8,0,32)] font-semibold text-lg">
+    <span><?= htmlspecialchars($finalistes[0]['nom']) ?></span>
+    <span class="text-xl font-bold text-[rgb(186,40,30)]">VS</span>
+    <span><?= htmlspecialchars($finalistes[1]['nom']) ?></span>
+  </div>
+</section>
+<?php endif; ?>
+
+
 <style>
     @media (max-width: 500px) {
   #player-positions div {

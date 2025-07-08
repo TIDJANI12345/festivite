@@ -226,7 +226,7 @@
     <li><a href="index.php">Accueil</a></li>
     <li><a href="foot.php">Football</a></li>
     <li><a href="sortie.php">Sortie</a></li>
-    <li><a href="../soiree/soiree.php">Soirée</a></li>
+    <li><a href="soiree.php">Soirée</a></li>
   </ul>
 
   <a class="admin-btn" href="admin.php">👤 Admin</a>
@@ -237,7 +237,7 @@
   <a href="index.php" onclick="toggleMobileMenu()">🏠 Accueil</a>
   <a href="foot.php" onclick="toggleMobileMenu()">⚽ Football</a>
   <a href="sortie.php" onclick="toggleMobileMenu()">🚌 Sortie</a>
-  <a href="../soiree/soiree.php" onclick="toggleMobileMenu()">🎤 Soirée</a>
+  <a href="soiree.php" onclick="toggleMobileMenu()">🎤 Soirée</a>
   <a class="admin-btn-slide" href="admin.php">👤 Espace Admin</a>
 </div>
 

@@ -78,6 +78,38 @@ lieu VARCHAR(100),
 programme TEXT
 );
 
+CREATE TABLE sortie_images (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sortie_id INT NOT NULL,
+  filename VARCHAR(255) NOT NULL,
+  commentaire TEXT DEFAULT NULL,
+  uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (sortie_id) REFERENCES sorties(id) ON DELETE CASCADE
+);
+
+CREATE TABLE soiree_images (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sortie_id INT NOT NULL,
+  filename VARCHAR(255) NOT NULL,
+  commentaire TEXT DEFAULT NULL,
+  uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  FOREIGN KEY (soiree_id) REFERENCES soirees(id) ON DELETE CASCADE
+);
+
+CREATE TABLE match_finale (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    equipe1_id INT NOT NULL,
+    equipe2_id INT NOT NULL,
+    score1 INT DEFAULT NULL,
+    score2 INT DEFAULT NULL,
+    statut ENUM('à venir', 'terminé') DEFAULT 'à venir',
+    date_match DATETIME DEFAULT NULL,
+
+    FOREIGN KEY (equipe1_id) REFERENCES equipes(id),
+    FOREIGN KEY (equipe2_id) REFERENCES equipes(id)
+);
+
+
 -- 1. Ajouter les poules
 INSERT INTO poules (nom) VALUES ('Poule A'), ('Poule B');
 
@@ -159,3 +191,10 @@ INSERT INTO joueurs (nom, equipe_id) VALUES
 ('YACOUBOU Oubeid' ,5),
 ('MAMAN Lawali Kabirou', 5),
 ('TIDJANI Mohamed', 5);
+
+CREATE TABLE soiree_images (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  filename VARCHAR(255) NOT NULL,
+  commentaire TEXT DEFAULT NULL,
+  uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

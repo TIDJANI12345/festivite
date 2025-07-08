@@ -15,7 +15,7 @@ try {
     // Générer un nom unique
     $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
     $filename = uniqid('img_', true) . '.' . $ext;
-    $uploadDir = __DIR__ . '/uploads/';
+    $uploadDir = __DIR__ . '/uploads/sortie/';
     $uploadPath = $uploadDir . $filename;
 
     // Créer dossier s'il n'existe pas

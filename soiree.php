@@ -40,7 +40,7 @@ require 'includes/config.php'; // <-- connexion PDO $pdo
   $stmt = $pdo->query("SELECT * FROM soiree_images ORDER BY uploaded_at DESC");
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     echo '<div class="image-card" data-aos="fade-up">';
-    echo '<img src="uploads/' . htmlspecialchars($row['filename']) . '" alt="Image soirée">';
+    echo '<img src="uploads/soiree/' . htmlspecialchars($row['filename']) . '" alt="Image soirée">';
     if (!empty($row['commentaire'])) {
       echo '<p>' . nl2br(htmlspecialchars($row['commentaire'])) . '</p>';
     }
@@ -49,7 +49,7 @@ require 'includes/config.php'; // <-- connexion PDO $pdo
   ?>
 </div>
 
-<form id="uploadForm" enctype="multipart/form-data" method="post" action="upload_image.php">
+<form id="uploadForm" enctype="multipart/form-data" method="post" action="galerie_soiree.php">
   <label for="image">Ajouter une image :</label>
   <input type="file" name="image" id="image" accept="image/*" required />
   
